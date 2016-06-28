@@ -1,0 +1,225 @@
+FloatLayout:
+    BoxLayout:
+        orientation: 'vertical'
+
+        StackLayout:
+            orientation: 'tb-lr'
+            spacing: '3dp'
+            height: '100dp'
+            size_hint: (1, None)
+
+            StackLayout:
+                size_hint: (None, 1)
+                width: '70dp'
+                Button:
+                    text: 'New'
+                    size_hint: (1, 1/3)
+                    on_release: app.on_new()
+                Button:
+                    text: 'Open'
+                    size_hint: (1, 1/3)
+                    on_release: app.open_file_dialog()
+                Button:
+                    text: 'Save'
+                    size_hint: (1, 1/3)
+                    on_release: app.save_file_dialog()
+            Label:
+                text: 'Size'
+                size_hint: (None, None)
+                height: '25dp'
+                width: '70dp'
+
+            BoxLayout:
+                orientation: 'horizontal'
+                size_hint: (None, None)
+                height: '30dp'
+                width: '70dp'
+                Label:
+                    text: 'W:'
+                    size_hint: (0.3, 1)
+                TextInput:
+                    text: str(drawer.map_width)
+                    on_text_validate: app.on_map_width_validate(self.text, self)
+                    multiline: False
+                    size_hint: (0.7, 1)
+            BoxLayout:
+                orientation: 'horizontal'
+                size_hint: (None, None)
+                height: '30dp'
+                width: '70dp'
+                Label:
+                    text: 'H:'
+                    size_hint: (0.3, 1)
+                TextInput:
+                    text: str(drawer.map_height)
+                    on_text_validate: app.on_map_height_validate(self.text, self)
+                    multiline: False
+                    size_hint: (0.7, 1)
+
+            Label:
+                text: 'Grid'
+                size_hint: (None, None)
+                height: '25dp'
+                width: '70dp'
+
+            BoxLayout:
+                orientation: 'horizontal'
+                size_hint: (None, None)
+                height: '30dp'
+                width: '70dp'
+
+                Label:
+                    text: 'Step:'
+                    size_hint: (0.6, 1)
+                TextInput:
+                    text: str(drawer.grid_step)
+                    multiline: False
+                    on_text_validate: app.on_step_validate(self.text, self)
+                    size_hint: (0.4, 1)
+
+            Label:
+                size_hint: (None, None)
+                height: '20dp'
+                width: '70dp'
+
+            StackLayout:
+                size_hint: (None, 1)
+                width: '140dp'
+                orientation: 'lr-tb'
+
+                Label:
+                    size_hint: (None, None)
+                    height: '30dp'
+                    width: '140dp'
+                    text: 'Action'
+
+                ToggleButton:
+                    group: 'action'
+                    text:'Wall'
+                    size_hint:(None, None)
+                    height:'30dp'
+                    width: '70dp'
+                    on_press: app.on_wall_press(self.state)
+                    state: 'down' if drawer.action == drawer.action.wall else 'normal'
+
+                ToggleButton:
+                    group: 'action'
+                    text:'Headline'
+                    size_hint:(None, None)
+                    height:'30dp'
+                    width: '70dp'
+                    on_press: app.on_headline_press(self.state)
+                    state: 'down' if drawer.action == drawer.action.headline else 'normal'
+
+                ToggleButton:
+                    group: 'action'
+                    text:'Car'
+                    size_hint:(None, None)
+                    height:'30dp'
+                    width: '70dp'
+                    on_press: app.on_car_press(self.state)
+                    state: 'down' if drawer.action == drawer.action.car else 'normal'
+
+                ToggleButton:
+                    group: 'action'
+                    text:'Finish'
+                    size_hint:(None, None)
+                    height:'30dp'
+                    width: '70dp'
+                    on_press: app.on_finish_press(self.state)
+                    state: 'down' if drawer.action == drawer.action.finish else 'normal'
+
+            BoxLayout:
+                orientation: 'horizontal'
+                size_hint: (None, None)
+                height: '30dp'
+                width: '110dp'
+                Label:
+                    text: 'Max time:'
+                    size_hint: (0.65, 1)
+                TextInput:
+                    text: str(drawer.max_time)
+                    multiline: False
+                    on_text_validate: app.on_time_validate(self.text, self)
+                    size_hint: (0.35, 1)
+
+
+        MapDrawer:
+            id: drawer
+            size_hint_x: 1
+
+
+
+<OpenMapPopup>:
+    title: 'Save net'
+    size_hint: (.9, .9)
+
+    BoxLayout:
+        orientation: 'vertical'
+
+        Label:
+            size_hint_y: None
+            height: '30dp'
+            id: cur_path
+
+        FileChooserIconView:
+            id: file_chooser
+            path: '.'
+            size_hint: (1,1)
+            filters: ['*.json']
+            on_submit: root.choose_cb()
+            on_selection: root.selection_cb()
+            on_path: root.path_cb()
+
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint_y: None
+            height: '30dp'
+            spacing: '10dp'
+
+            Label:
+                text: 'File:'
+                size_hint_x: None
+                width: '50dp'
+
+            TextInput:
+                multiline: False
+                id: file_input
+
+            Button:
+                text: 'Ok'
+                size_hint_x: None
+                on_release: root.ok_cb()
+
+            Button:
+                text: 'Cancel'
+                size_hint_x: None
+                on_release: root.cancel_cb()
+
+<OkCancelPopup>:
+    title: 'Warning'
+    size_hint: (None, None)
+    height: '200dp'
+    width: '300dp'
+    auto_dismiss: False
+
+    BoxLayout:
+        orientation: 'vertical'
+
+        Label:
+            id: message_label
+            halign: 'center'
+
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint: (1, None)
+            height: '35dp'
+
+            Button:
+                text: 'Ok'
+                on_release: root.dismiss(); root.ok_cb()
+
+            Button:
+                text: 'Cancel'
+                on_release: root.dismiss(); root.cancel_cb()
+
