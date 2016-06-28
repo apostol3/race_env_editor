@@ -259,6 +259,7 @@ class MapDrawer(Widget):
 
     def inner_draw(self):
         sel_r = self.selection_r * self.zoom
+        show_selection_areas = self.action == CurrentAction.edit
 
         Color(*self.colors['grid'])
         for i in range(0, app.map.size[0], self.grid_step):
@@ -266,15 +267,16 @@ class MapDrawer(Widget):
         for i in range(0, app.map.size[1], self.grid_step):
             Line(points=(0, i, app.map.size[0], i))
 
-        Color(*self.colors['finish'], 0.3)
-        for point in app.map.finish:
-            Ellipse(pos=(point[0] - sel_r, point[1] - sel_r),
-                    size=(sel_r * 2, sel_r * 2))
-
         Color(*self.colors['finish'], 0.8)
         if len(app.map.finish) == 2:
             Rectangle(pos=app.map.finish[0],
                       size=(app.map.finish[1][0] - app.map.finish[0][0], app.map.finish[1][1] - app.map.finish[0][1]))
+
+        if show_selection_areas:
+            Color(*self.colors['finish'], 0.3)
+            for point in app.map.finish:
+                Ellipse(pos=(point[0] - sel_r, point[1] - sel_r),
+                        size=(sel_r * 2, sel_r * 2))
 
         Color(*self.colors['wall'])
         Line(rectangle=(0, 0, app.map.size[0], app.map.size[1]))
@@ -282,11 +284,12 @@ class MapDrawer(Widget):
             for i in range(len(wall) - 1):
                 Line(points=(wall[i][0], wall[i][1], wall[i + 1][0], wall[i + 1][1]))
 
-        Color(*self.colors['wall'], 0.3)
-        for wall in app.map.walls:
-            for point in wall:
-                Ellipse(pos=(point[0] - sel_r, point[1] - sel_r),
-                        size=(sel_r * 2, sel_r * 2))
+        if show_selection_areas:
+            Color(*self.colors['wall'], 0.3)
+            for wall in app.map.walls:
+                for point in wall:
+                    Ellipse(pos=(point[0] - sel_r, point[1] - sel_r),
+                            size=(sel_r * 2, sel_r * 2))
 
         Color(*self.colors['main_line'])
         for i in range(len(app.map.headline) - 1):
@@ -294,10 +297,11 @@ class MapDrawer(Widget):
                 app.map.headline[i][0], app.map.headline[i][1], app.map.headline[i + 1][0],
                 app.map.headline[i + 1][1]))
 
-        Color(*self.colors['main_line'], 0.3)
-        for point in app.map.headline:
-            Ellipse(pos=(point[0] - sel_r, point[1] - sel_r),
-                    size=(sel_r * 2, sel_r * 2))
+        if show_selection_areas:
+            Color(*self.colors['main_line'], 0.3)
+            for point in app.map.headline:
+                Ellipse(pos=(point[0] - sel_r, point[1] - sel_r),
+                        size=(sel_r * 2, sel_r * 2))
 
         Color(*self.colors['selected_car'])
         sz = app.map.car_size
