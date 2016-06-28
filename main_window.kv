@@ -90,8 +90,17 @@ FloatLayout:
                 Label:
                     size_hint: (None, None)
                     height: '30dp'
-                    width: '140dp'
+                    width: '70dp'
                     text: 'Action'
+
+                ToggleButton:
+                    group: 'action'
+                    text:'Edit'
+                    size_hint:(None, None)
+                    height:'30dp'
+                    width: '70dp'
+                    on_press: app.on_edit_press(self.state)
+                    state: 'down' if drawer.action == drawer.action.edit else 'normal'
 
                 ToggleButton:
                     group: 'action'
