@@ -2,8 +2,10 @@ import math
 import os
 from enum import Enum
 
+from kivy import Config
 from kivy.app import App
 from kivy.core.window import Window
+from kivy.garden.contextmenu import ContextMenu, ContextMenuTextItem
 from kivy.graphics import Color, Rectangle, Ellipse
 from kivy.graphics import Translate, ScissorPush, ScissorPop, Scale
 from kivy.graphics.vertex_instructions import Line, Quad
@@ -13,6 +15,11 @@ from kivy.uix.popup import Popup
 from kivy.uix.widget import Widget
 
 from map import Map
+
+"""This needs for .kv file"""
+ContextMenu, ContextMenuTextItem
+
+Config.set('input', 'mouse', Config.get('input', 'mouse') + ',disable_multitouch')
 
 __author__ = 'leon.ljsh'
 
@@ -162,10 +169,17 @@ class MapDrawer(Widget):
         self.draw()
 
     def on_button_right_up(self, touch):
-        pass
+        if self.sel is None:
+            return
+
+        if self.sel[0] == 'wall' or self.sel[0] == 'headline':
+            app.root.ids.context_on_point.show(*touch.pos)
 
     def on_button_right_down(self, touch):
-        pass
+        if self.action != CurrentAction.edit:
+            return
+
+        self.on_button_left_down(touch)
 
     def on_scrolldown(self, touch):
         if self.zoom < 0.01:
@@ -342,7 +356,37 @@ class MapDrawer(Widget):
                     width=1.3 * self.zoom, close=True
                 )
 
+    def on_context_remove_point(self, *_):
+        if self.sel is None:
+            return
+        if self.sel[0] == 'wall':
+            app.map.walls[self.sel[1]].pop(self.sel[2])
+        elif self.sel[0] == 'headline':
+            app.map.headline.pop(self.sel[1])
+        self.sel = None
+        self.draw()
 
+
+    def on_context_remove_object(self, *_):
+        if self.sel is None:
+            return
+        if self.sel[0] == 'wall':
+            app.map.walls.pop(self.sel[1])
+        elif self.sel[0] == 'headline':
+            app.map.headline = []
+        self.sel = None
+        self.draw()
+
+    def on_context_add_point(self, *_):
+
+        if self.sel is None:
+            return
+        if self.sel[0] == 'wall':
+            app.map.walls[self.sel[1]].insert(self.sel[2], app.map.walls[self.sel[1]][self.sel[2]])
+        elif self.sel[0] == 'headline':
+            app.map.headline.insert(self.sel[1], app.map.headline[self.sel[1]])
+
+        self.draw()
 class MainWindow(App):
     def __init__(self, **kwargs):
         super(MainWindow, self).__init__(**kwargs)

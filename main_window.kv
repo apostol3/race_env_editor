@@ -165,6 +165,23 @@ FloatLayout:
             id: drawer
             size_hint_x: 1
 
+            ContextMenu:
+                id: context_on_point
+                orig_parent: root
+                cancel_handler_widget: root
+
+                ContextMenuTextItem:
+                    text: 'Remove point'
+                    on_release: drawer.on_context_remove_point(); context_on_point.hide()
+
+                ContextMenuTextItem:
+                    text: 'Remove object'
+                    on_release: drawer.on_context_remove_object(); context_on_point.hide()
+
+                ContextMenuTextItem:
+                    text: 'Add point'
+                    on_release: drawer.on_context_add_point(); context_on_point.hide()
+
 
 
 <OpenMapPopup>:
