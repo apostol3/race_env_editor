@@ -454,6 +454,10 @@ class OpenMapPopup(Popup):
 
 
 class SaveMapPopup(OpenMapPopup):
+    def __init__(self, *args, **kwargs):
+        super(SaveMapPopup, self).__init__(*args, **kwargs)
+        self.title = 'Save map'
+
     def ok_cb(self, *_):
         fname = self.ids.file_input.text + ('.json' if self.ids.file_input.text.find('.') == -1 else '')
         if os.path.exists(fname):

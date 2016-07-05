@@ -3,10 +3,18 @@ FloatLayout:
         orientation: 'vertical'
 
         StackLayout:
+            canvas:
+                Color:
+                    rgb: (0.1,0.1,0.1)
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+
             orientation: 'tb-lr'
             spacing: '3dp'
             height: '100dp'
             size_hint: (1, None)
+            padding: 0,3
 
             StackLayout:
                 size_hint: (None, 1)
@@ -142,15 +150,15 @@ FloatLayout:
                 orientation: 'horizontal'
                 size_hint: (None, None)
                 height: '30dp'
-                width: '110dp'
+                width: '120dp'
                 Label:
                     text: 'Max time:'
-                    size_hint: (0.65, 1)
+                    size_hint: (0.7, 1)
                 TextInput:
                     text: str(drawer.max_time)
                     multiline: False
                     on_text_validate: app.on_time_validate(self.text, self)
-                    size_hint: (0.35, 1)
+                    size_hint: (0.3, 1)
 
 
         MapDrawer:
@@ -160,7 +168,7 @@ FloatLayout:
 
 
 <OpenMapPopup>:
-    title: 'Save net'
+    title: 'Open map'
     size_hint: (.9, .9)
 
     BoxLayout:
