@@ -366,7 +366,6 @@ class MapDrawer(Widget):
         self.sel = None
         self.draw()
 
-
     def on_context_remove_object(self, *_):
         if self.sel is None:
             return
@@ -378,7 +377,6 @@ class MapDrawer(Widget):
         self.draw()
 
     def on_context_add_point(self, *_):
-
         if self.sel is None:
             return
         if self.sel[0] == 'wall':
@@ -387,6 +385,8 @@ class MapDrawer(Widget):
             app.map.headline.insert(self.sel[1], app.map.headline[self.sel[1]])
 
         self.draw()
+
+
 class MainWindow(App):
     def __init__(self, **kwargs):
         super(MainWindow, self).__init__(**kwargs)
