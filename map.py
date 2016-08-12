@@ -13,7 +13,7 @@ class Map:
         self.cars = []
         self.finish = []
         self.objects = []
-        self.car_size = (0.5, 1)
+        self.car_size = (1.8/2, 4.6/2)
 
     def start_new_wall(self):
         self.walls.append([])

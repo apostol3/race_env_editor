@@ -190,7 +190,7 @@ class MapDrawer(Widget):
         self.draw()
 
     def on_scrollup(self, touch):
-        if self.zoom > 1:
+        if self.zoom > 100:
             return
         self.zoom *= 1.05
         self.camx += self.zoom * (0.05 / 1.05) * (touch.pos[0] - self.pos[0])
