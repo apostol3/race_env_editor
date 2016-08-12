@@ -182,6 +182,16 @@ FloatLayout:
                     text: 'Add point'
                     on_release: drawer.on_context_add_point(); context_on_point.hide()
 
+            ContextMenu:
+                id: context_on_car
+                orig_parent: root
+                cancel_handler_widget: root
+
+                ContextMenuTextItem:
+                    text: 'Remove car'
+                    on_release: drawer.on_context_remove_car(); context_on_car.hide()
+
+
 
 
 <OpenMapPopup>:

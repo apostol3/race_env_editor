@@ -30,7 +30,6 @@ class Map:
         self.headline.append((x, y))
 
     def create_car(self, x, y):
-        self.cars.clear()
         self.cars.append((x, y, 3 * math.pi / 2))
 
     def append_finish_point(self, x, y):

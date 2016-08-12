@@ -174,6 +174,8 @@ class MapDrawer(Widget):
 
         if self.sel[0] == 'wall' or self.sel[0] == 'headline':
             app.root.ids.context_on_point.show(*touch.pos)
+        elif self.sel[0] == 'car':
+            app.root.ids.context_on_car.show(*touch.pos)
 
     def on_button_right_down(self, touch):
         if self.action != CurrentAction.edit:
@@ -245,10 +247,12 @@ class MapDrawer(Widget):
             self.set_action(CurrentAction.edit)
         elif keycode[1] == 'escape':
             self.set_action(CurrentAction.none)
-        elif keycode[1] == 'numpadadd' and len(app.map.cars) > 0:
-            app.map.cars[-1] = (app.map.cars[-1][0], app.map.cars[-1][1], app.map.cars[-1][2] + 0.1)
-        elif keycode[1] == 'numpadsubstract' and len(app.map.cars) > 0:
-            app.map.cars[-1] = (app.map.cars[-1][0], app.map.cars[-1][1], app.map.cars[-1][2] - 0.1)
+        elif keycode[1] == 'numpadadd' and self.sel is not None and self.sel[0] == 'car':
+            app.map.cars[self.sel[1]] = (
+            app.map.cars[self.sel[1]][0], app.map.cars[self.sel[1]][1], app.map.cars[self.sel[1]][2] + 0.1)
+        elif keycode[1] == 'numpadsubstract' and self.sel is not None and self.sel[0] == 'car':
+            app.map.cars[self.sel[1]] = (
+            app.map.cars[self.sel[1]][0], app.map.cars[self.sel[1]][1], app.map.cars[self.sel[1]][2] - 0.1)
         self.draw()
         return True
 
@@ -384,6 +388,17 @@ class MapDrawer(Widget):
         elif self.sel[0] == 'headline':
             app.map.headline.insert(self.sel[1], app.map.headline[self.sel[1]])
 
+        self.draw()
+
+    def on_context_remove_car(self, *_):
+        if self.sel is None:
+            return
+        if self.sel[0] != 'car':
+            return
+
+        app.map.cars.pop(self.sel[1])
+
+        self.sel = None
         self.draw()
 
 
