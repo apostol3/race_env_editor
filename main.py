@@ -481,6 +481,7 @@ class MainWindow(App):
         self.map = Map.open_from_file(file)
         self.drawer.map_width, self.drawer.map_height = self.map.size
         self.drawer.max_time = self.map.max_time
+        self.title = os.path.basename(file) + ' - Map editor for race_env'
         self.drawer.draw()
 
     def save_file(self, file):
